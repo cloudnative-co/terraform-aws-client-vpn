@@ -1,0 +1,10 @@
+variable "name" {}
+variable "region" {}
+variable "vpc-cidr" {}
+variable "vpc-az-cider" {}
+variable "vpc-az-name" {}
+variable "client-cidr" {}
+variable "client-vpn-saml-provider-arn" {}
+variable "self-service-saml-provider-arn" {}
+variable "server-certificate-filename" {}
+variable "server-private-key-filename" {}
