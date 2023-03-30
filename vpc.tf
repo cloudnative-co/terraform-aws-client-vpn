@@ -9,12 +9,21 @@ resource "aws_vpc" "bastion" {
 }
 
 # Subnet
-resource "aws_subnet" "bastion" {
+resource "aws_subnet" "bastion-public" {
   vpc_id            = aws_vpc.bastion.id
-  cidr_block        = var.vpc-az-cider
+  cidr_block        = var.vpc-az-public-cider
   availability_zone = var.vpc-az-name
   tags = {
-    Name = "${var.name}-subnet"
+    Name = "${var.name}-public-subnet"
+  }
+}
+
+resource "aws_subnet" "bastion-private" {
+  vpc_id            = aws_vpc.bastion.id
+  cidr_block        = var.vpc-az-private-cider
+  availability_zone = var.vpc-az-name
+  tags = {
+    Name = "${var.name}-private-subnet"
   }
 }
 
@@ -27,21 +36,37 @@ resource "aws_internet_gateway" "bastion" {
 }
 
 # Route Table
-resource "aws_route_table" "bastion" {
+resource "aws_route_table" "bastion-public" {
   vpc_id = aws_vpc.bastion.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.bastion.id
   }
   tags = {
-    Name = "${var.name}-route-table"
+    Name = "${var.name}-public-route-table"
+  }
+}
+
+resource "aws_route_table" "bastion-private" {
+  vpc_id = aws_vpc.bastion.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.bastion.id
+  }
+  tags = {
+    Name = "${var.name}-private-route-table"
   }
 }
 
 # Associate Subnet with Route Table
-resource "aws_route_table_association" "bastion" {
-  subnet_id      = aws_subnet.bastion.id
-  route_table_id = aws_route_table.bastion.id
+resource "aws_route_table_association" "bastion-public" {
+  subnet_id      = aws_subnet.bastion-public.id
+  route_table_id = aws_route_table.bastion-public.id
+}
+
+resource "aws_route_table_association" "bastion-private" {
+  subnet_id      = aws_subnet.bastion-private.id
+  route_table_id = aws_route_table.bastion-private.id
 }
 
 # DHCP Option Set

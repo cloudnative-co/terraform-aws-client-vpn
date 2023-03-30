@@ -17,16 +17,20 @@ resource "aws_ec2_client_vpn_endpoint" "bastion" {
   connection_log_options {
     enabled = false
   }
+
+  tags = {
+    Name = "${var.name}-client-vpn-endpoint"
+  }
 }
 
 resource "aws_ec2_client_vpn_network_association" "bastion" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.bastion.id
-  subnet_id              = aws_subnet.bastion.id
+  subnet_id              = aws_subnet.bastion-private.id
 }
 
 resource "aws_ec2_client_vpn_authorization_rule" "bastion" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.bastion.id
-  target_network_cidr    = aws_subnet.bastion.cidr_block
+  target_network_cidr    = aws_subnet.bastion-private.cidr_block
   authorize_all_groups   = true
 }
 
