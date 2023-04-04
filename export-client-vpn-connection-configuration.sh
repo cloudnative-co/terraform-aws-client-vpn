@@ -5,6 +5,8 @@ LF=${LF%_}
 
 ENDPOINTID=$(terraform output -raw client-vpn-endpoint-id)
 REGION=$(terraform output -raw region)
+CERTFILE=$(terraform output -raw client-cert-filename)
+KEYFILE=$(terraform output -raw client-private-key-filename)
 
 aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id ${ENDPOINTID} --region ${REGION} \
 | jq -r ".ClientConfiguration" \
@@ -12,8 +14,8 @@ aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id ${ENDPOI
 | sed 's/verify-x509-name .*$//g'
 
 echo "<cert>"
-cat aws-client-vpn-client.crt
+cat ${CERTFILE}
 echo "</cert>"
 echo "<key>"
-cat aws-client-vpn-client.key
+cat ${KEYFILE}
 echo "</key>"

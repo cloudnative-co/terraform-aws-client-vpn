@@ -7,3 +7,13 @@ output "region" {
   description = "AWS Region"
   value       = var.region
 }
+
+output "client-cert-filename" {
+  description = "Client Certificate Filename"
+  value       = var.client-certificate-filename
+}
+
+output "client-private-key-filename" {
+  description = "Client Private Key Filename"
+  value       = var.client-private-key-filename
+}
