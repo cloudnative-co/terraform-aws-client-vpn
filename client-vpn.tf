@@ -45,8 +45,3 @@ resource "aws_ec2_client_vpn_route" "bastion" {
   destination_cidr_block = "0.0.0.0/0"
   target_vpc_subnet_id   = aws_ec2_client_vpn_network_association.bastion.subnet_id
 }
-
-output "client-vpn-endpoint-id" {
-  description = "Client VPN Endpoint ID"
-  value = aws_ec2_client_vpn_endpoint.bastion.id
-}

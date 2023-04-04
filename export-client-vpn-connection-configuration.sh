@@ -3,10 +3,13 @@
 LF=$(printf '\\\012_')
 LF=${LF%_}
 
-aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id cvpn-endpoint-0484c98a93c32a59c --region ap-northeast-1 \
+ENDPOINTID=$(terraform output -raw client-vpn-endpoint-id)
+REGION=$(terraform output -raw region)
+
+aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id ${ENDPOINTID} --region ${REGION} \
 | jq -r ".ClientConfiguration" \
 | sed 's/\\n/'"$LF"'/g' \
-| sed 's/verify-x509-name aws-client-vpn-server name//g'
+| sed 's/verify-x509-name .*$//g'
 
 echo "<cert>"
 cat aws-client-vpn-client.crt
