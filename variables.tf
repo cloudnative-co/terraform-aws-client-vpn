@@ -6,8 +6,6 @@ variable "vpc-az-public-cider" {}
 variable "vpc-az-private-cider" {}
 variable "vpc-az-name" {}
 variable "client-cidr" {}
-variable "client-vpn-saml-provider-arn" {}
-variable "self-service-saml-provider-arn" {}
 variable "client-certificate-filename" {}
 variable "client-private-key-filename" {}
 variable "server-certificate-filename" {}
